@@ -9,6 +9,9 @@ import { LoggerModule } from './logger/logger.module';
 import { CacheModule } from './cache/cache.module';
 import { RequestIdMiddleware } from './common/middleware/request-id.middleware';
 import { GlobalConfigModule } from './config/config.module';
+import { BullModule } from '@nestjs/bull';
+import { NotificationModule } from './notification/notification.module';
+import { GlobalConfigService } from './config/global-config.service';
 
 @Module({
   imports: [
@@ -16,6 +19,17 @@ import { GlobalConfigModule } from './config/config.module';
     DatabaseModule,
     LoggerModule,
     ScheduleModule.forRoot(),
+    BullModule.forRootAsync({
+      imports: [GlobalConfigModule],
+      useFactory: async (configService: GlobalConfigService) => ({
+        redis: {
+          host: configService.getRedisConfig().host,
+          port: configService.getRedisConfig().port,
+        },
+      }),
+      inject: [GlobalConfigService],
+    }),
+    NotificationModule,
     SettlementModule,
   ],
   controllers: [AppController],

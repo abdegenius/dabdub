@@ -1,5 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsString, IsNumber, IsEnum, IsOptional, Min, IsEmail } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString, IsUUID, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export enum SettlementStatus {
   PENDING = 'PENDING',
@@ -126,4 +128,49 @@ export class SettlementResponseDto {
     example: '2024-01-20T12:00:00Z',
   })
   completedAt?: Date;
+
+
+export class BankDetailsDto {
+    @IsString()
+    @IsNotEmpty()
+    accountNumber!: string;
+
+    @IsString()
+    @IsNotEmpty()
+    routingNumber!: string;
+
+    @IsString()
+    @IsNotEmpty()
+    name!: string;
+
+    @IsString()
+    @IsNotEmpty()
+    bankName!: string;
+}
+
+export class CreateSettlementDto {
+    @IsUUID()
+    @IsNotEmpty()
+    paymentRequestId!: string;
+
+    @IsUUID()
+    @IsNotEmpty()
+    merchantId!: string;
+
+    @IsNumber()
+    @IsNotEmpty()
+    amount!: number;
+
+    @IsString()
+    @IsNotEmpty()
+    currency!: string;
+
+    @IsString()
+    @IsNotEmpty()
+    sourceCurrency!: string;
+
+    @ValidateNested()
+    @Type(() => BankDetailsDto)
+    @IsNotEmpty()
+    bankDetails!: BankDetailsDto;
 }

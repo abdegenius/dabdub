@@ -12,6 +12,7 @@ import { GlobalConfigModule } from './config/config.module';
 import { BullModule } from '@nestjs/bull';
 import { NotificationModule } from './notification/notification.module';
 import { GlobalConfigService } from './config/global-config.service';
+import { BlockchainModule } from './blockchain/blockchain.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { GlobalConfigService } from './config/global-config.service';
     }),
     NotificationModule,
     SettlementModule,
+    BlockchainModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -9,11 +9,22 @@ import { Injectable, Controller, Post, Body, Get, Param } from '@nestjs/common';
 import {
   NotFoundException,
   BadRequestException,
-  // InsufficientFundsException,
-  // WalletNotFoundException,
+
   ValidationException,
 } from '../exceptions/http-exceptions';
 import { IsEmail, IsNotEmpty, MinLength } from 'class-validator';
+
+export class InsufficientFundsException extends BadRequestException {
+  constructor(balance: number, required: number, metadata?: any) {
+    super('Insufficient funds', { balance, required, ...metadata });
+  }
+}
+
+export class WalletNotFoundException extends NotFoundException {
+  constructor(walletId: string) {
+    super(`Wallet ${walletId} not found`);
+  }
+}
 
 // ============================================================================
 // Example 1: Using Business Exceptions in Services
@@ -40,9 +51,9 @@ export class WalletService {
     return { success: true };
   }
 
-  private async findWallet(walletId: string) {
+  private async findWallet(walletId: string): Promise<{ balance: number } | null> {
     // Mock implementation
-    return null;
+    return { balance: 1000 };
   }
 }
 

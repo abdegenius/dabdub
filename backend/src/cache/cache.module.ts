@@ -32,10 +32,10 @@ export class CacheModule {
             if (config.cluster?.enabled) {
               const cluster = new Cluster(config.cluster.nodes, {
                 ...config.cluster.options,
-                maxRetriesPerRequest: config.maxRetriesPerRequest,
+                // maxRetriesPerRequest removed as it is not in ClusterOptions
                 enableReadyCheck: config.enableReadyCheck,
                 enableOfflineQueue: config.enableOfflineQueue,
-              } as any);
+              });
 
               return {
                 store: redisStore as any,
@@ -53,12 +53,8 @@ export class CacheModule {
               password: config.password,
               db: config.db,
               tls: config.tls,
-              retryStrategy: (times: number) => {
-                if (times > config.maxRetries) {
-                  return null;
-                }
-                return Math.min(times * 50, 2000);
-              },
+              // maxRetries removed as it is not in RedisOptions
+              retryStrategy: (times) => Math.min(times * 50, 2000),
               enableReadyCheck: config.enableReadyCheck,
               maxRetriesPerRequest: config.maxRetriesPerRequest,
               lazyConnect: config.lazyConnect,

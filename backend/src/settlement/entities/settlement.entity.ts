@@ -9,6 +9,8 @@ import {
   OneToOne,
   JoinColumn,
 } from 'typeorm';
+import { Merchant } from '../../database/entities/merchant.entity';
+import { PaymentRequest } from '../../database/entities/payment-request.entity';
 
 export enum SettlementStatus {
   PENDING = 'pending',
@@ -201,12 +203,11 @@ export class Settlement {
   metadata!: Record<string, any>;
 
   // Relationships
-  // Note: These will be properly configured once PaymentRequest and Merchant entities exist
-  // @OneToOne(() => PaymentRequest, (paymentRequest) => paymentRequest.settlement)
-  // @JoinColumn({ name: 'payment_request_id' })
-  // paymentRequest: PaymentRequest;
+  @OneToOne(() => PaymentRequest, (paymentRequest) => paymentRequest.settlement)
+  @JoinColumn({ name: 'payment_request_id' })
+  paymentRequest!: PaymentRequest;
 
-  // @ManyToOne(() => Merchant, (merchant) => merchant.settlements)
-  // @JoinColumn({ name: 'merchant_id' })
-  // merchant: Merchant;
+  @ManyToOne(() => Merchant, (merchant) => merchant.settlements)
+  @JoinColumn({ name: 'merchant_id' })
+  merchant!: Merchant;
 }

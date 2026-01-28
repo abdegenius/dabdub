@@ -4,11 +4,14 @@ import { Repository } from 'typeorm';
 import { Payment, PaymentStatus } from '../database/entities/payment.entity';
 import * as QRCode from 'qrcode';
 
+import { PaymentMetrics } from './payment.metrics';
+
 @Injectable()
 export class PaymentService {
   constructor(
     @InjectRepository(Payment)
     private readonly paymentRepository: Repository<Payment>,
+    private readonly metrics: PaymentMetrics,
   ) {}
 
   async getPaymentDetails(id: string): Promise<Payment> {
@@ -35,6 +38,12 @@ export class PaymentService {
     if (data.status) {
       payment.status = data.status;
       await this.paymentRepository.save(payment);
+
+      if (data.status === PaymentStatus.COMPLETED) {
+        this.metrics.incrementPaymentProcessed(payment.currency || 'USD');
+      } else if (data.status === PaymentStatus.FAILED) {
+        this.metrics.incrementPaymentFailed(payment.currency || 'USD', data.reason || 'unknown');
+      }
     }
   }
 

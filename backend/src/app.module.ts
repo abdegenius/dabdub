@@ -24,6 +24,7 @@ import { PaymentRequestModule } from './payment-request/payment-request.module';
 // Middleware
 import { RequestIdMiddleware } from './common/middleware/request-id.middleware';
 import { EVMModule } from './evm/evm.module';
+import { MonitoringModule } from './monitoring/monitoring.module';
 
 
 @Module({
@@ -60,6 +61,7 @@ import { EVMModule } from './evm/evm.module';
     PublicModule,
     EVMModule,
     PaymentRequestModule,
+    MonitoringModule,
   ],
   controllers: [AppController],
   providers: [AppService],

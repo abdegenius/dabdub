@@ -1,6 +1,8 @@
 import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
+import { APP_FILTER } from '@nestjs/core';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { SentryFilter } from './common/filters/sentry.filter';
 import { BullModule } from '@nestjs/bull';
 // Controllers & Services
 import { AppController } from './app.controller';
@@ -28,8 +30,11 @@ import { StellarModule } from './stellar/stellar.module';
 import { MonitoringModule } from './monitoring/monitoring.module';
 import { MerchantModule } from './merchant/merchant.module';
 
+import { SentryModule } from '@sentry/nestjs/dist';
+
 @Module({
   imports: [
+    SentryModule.forRoot(),
     GlobalConfigModule,
     DatabaseModule,
     CacheModule.register({ isGlobal: true }),
@@ -67,7 +72,13 @@ import { MerchantModule } from './merchant/merchant.module';
     MerchantModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_FILTER,
+      useClass: SentryFilter,
+    },
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

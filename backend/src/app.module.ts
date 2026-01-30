@@ -26,7 +26,7 @@ import { MerchantModule } from './merchant/merchant.module';
 import { RequestIdMiddleware } from './common/middleware/request-id.middleware';
 import { EVMModule } from './evm/evm.module';
 import { MonitoringModule } from './monitoring/monitoring.module';
-
+import { MerchantModule } from './merchant/merchant.module';
 
 @Module({
   imports: [
@@ -64,11 +64,11 @@ import { MonitoringModule } from './monitoring/monitoring.module';
     PaymentRequestModule,
     MerchantModule,
     MonitoringModule,
+    MerchantModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(RequestIdMiddleware).forRoutes('*');

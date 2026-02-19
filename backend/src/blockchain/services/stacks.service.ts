@@ -78,11 +78,11 @@ export class StacksService {
           params: { path: { principal: address } },
         },
       );
-      if (error) throw error;
+      if (error) throw new Error(JSON.stringify(error));
       return data;
     } catch (error) {
       this.logger.error(`Error fetching balance for ${address}:`, error);
-      throw error;
+      throw new Error(`Error fetching balance for ${address}`);
     }
   }
 

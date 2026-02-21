@@ -23,6 +23,7 @@ import { AnalyticsService } from './analytics.service';
 import { ReportService } from './report.service';
 import { RevenueOverviewService } from './revenue-overview.service';
 import { RevenueExportService } from './revenue-export.service';
+import { VolumeAnalyticsService } from './volume-analytics.service';
 import {
   DateRangeDto,
   DateRangeQueryDto,
@@ -50,6 +51,10 @@ import {
   AcknowledgeAlertDto,
   SystemAlertDto,
 } from './dto/system-analytics.dto';
+import {
+  VolumeAnalyticsQueryDto,
+  VolumeAnalyticsResponseDto,
+} from './dto/volume-analytics.dto';
 import { JwtGuard } from '../auth/guards/jwt.guard';
 import { RequirePermissionGuard } from '../auth/guards/require-permission.guard';
 import { RequirePermission } from '../auth/decorators/require-permission.decorator';
@@ -171,21 +176,23 @@ export class AnalyticsController {
       new Date(endDate),
       interval,
     );
-  } @Get('volume')
-@UseGuards(JwtGuard, RequirePermissionGuard)
-@RequirePermission('analytics:read')
-@ApiOperation({
-  summary: 'Transaction volume time-series',
-  description:
-    'Returns volume analytics with optional groupBy breakdown. Supports hour/day/week/month granularity with zero-filled gaps.',
-})
-@ApiResponse({ status: 200, type: VolumeAnalyticsResponseDto })
-@ApiResponse({ status: 400, description: 'Date range exceeds limit or endDate is in the future' })
-async getVolumeAnalytics(
-  @Query() query: VolumeAnalyticsQueryDto,
-): Promise<VolumeAnalyticsResponseDto> {
-  return this.volumeAnalyticsService.getVolumeAnalytics(query);
-}
+  }
+
+  @Get('volume')
+  @UseGuards(JwtGuard, RequirePermissionGuard)
+  @RequirePermission('analytics:read')
+  @ApiOperation({
+    summary: 'Transaction volume time-series',
+    description:
+      'Returns volume analytics with optional groupBy breakdown. Supports hour/day/week/month granularity with zero-filled gaps.',
+  })
+  @ApiResponse({ status: 200, type: VolumeAnalyticsResponseDto })
+  @ApiResponse({ status: 400, description: 'Date range exceeds limit or endDate is in the future' })
+  async getVolumeAnalytics(
+    @Query() query: VolumeAnalyticsQueryDto,
+  ): Promise<VolumeAnalyticsResponseDto> {
+    return this.volumeAnalyticsService.getVolumeAnalytics(query);
+  }
   @Get('system')
   @UseGuards(JwtGuard, RequirePermissionGuard)
   @RequirePermission('analytics:read')

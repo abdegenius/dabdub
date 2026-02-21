@@ -24,6 +24,12 @@
       ],
       "@common/*": [
         "src/common/*"
+      ],
+      "viem": [
+        "src/types/viem-shim"
+      ],
+      "viem/*": [
+        "src/types/viem-shim"
       ]
     },
     "noImplicitThis": false,

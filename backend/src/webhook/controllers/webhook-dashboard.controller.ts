@@ -12,11 +12,11 @@ import {
   ApiBearerAuth,
 } from '@nestjs/swagger';
 import { WebhookDashboardService } from '../services/webhook-dashboard.service';
-import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
+import { JwtGuard } from '../../auth/guards/jwt.guard';
 
 @ApiTags('Webhook Dashboard')
 @ApiBearerAuth('JWT-auth')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtGuard)
 @Controller('webhooks/dashboard')
 export class WebhookDashboardController {
   constructor(

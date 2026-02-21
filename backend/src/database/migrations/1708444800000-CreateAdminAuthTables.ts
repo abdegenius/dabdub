@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner, Table, Index } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table, TableIndex } from 'typeorm';
 
 export class CreateAdminAuthTables1708444800000 implements MigrationInterface {
   name = 'CreateAdminAuthTables1708444800000';
@@ -111,18 +111,27 @@ export class CreateAdminAuthTables1708444800000 implements MigrationInterface {
     // Create indexes for admin_login_attempts
     await queryRunner.createIndex(
       'admin_login_attempts',
-      new Index('IDX_admin_login_attempts_email_created', ['email', 'createdAt']),
+      new TableIndex({
+        name: 'IDX_admin_login_attempts_email_created',
+        columnNames: ['email', 'createdAt'],
+      }),
     );
 
     await queryRunner.createIndex(
       'admin_login_attempts',
-      new Index('IDX_admin_login_attempts_ip_created', ['ipAddress', 'createdAt']),
+      new TableIndex({
+        name: 'IDX_admin_login_attempts_ip_created',
+        columnNames: ['ipAddress', 'createdAt'],
+      }),
     );
 
     // Create index for admin_sessions
     await queryRunner.createIndex(
       'admin_sessions',
-      new Index('IDX_admin_sessions_user_active', ['userId', 'isActive']),
+      new TableIndex({
+        name: 'IDX_admin_sessions_user_active',
+        columnNames: ['userId', 'isActive'],
+      }),
     );
   }
 

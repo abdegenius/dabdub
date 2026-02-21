@@ -51,7 +51,6 @@ export class AdminAuthService {
       where: { 
         email, 
         isActive: true,
-        role: UserRole.ADMIN || UserRole.SUPPORT_ADMIN,
       },
     });
 
@@ -103,11 +102,11 @@ export class AdminAuthService {
       };
 
       const accessToken = this.jwtService.sign(accessTokenPayload, {
-        expiresIn: adminJwtExpiresIn,
+        expiresIn: adminJwtExpiresIn as any,
       });
 
       const refreshToken = this.jwtService.sign(refreshTokenPayload, {
-        expiresIn: refreshTokenExpiresIn,
+        expiresIn: refreshTokenExpiresIn as any,
       });
 
       // Create admin session
@@ -178,7 +177,7 @@ export class AdminAuthService {
       };
 
       const accessToken = this.jwtService.sign(accessTokenPayload, {
-        expiresIn: adminJwtExpiresIn,
+        expiresIn: adminJwtExpiresIn as any,
       });
 
       this.logger.log(`Admin token refreshed for ${user.email} from ${ipAddress}`);

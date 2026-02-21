@@ -13,7 +13,8 @@ export class BinanceProvider implements RateProvider {
   async getRate(pair: string): Promise<number> {
     try {
       // Mapping BTC-USD to BTCUSDT for Binance usually
-      const [base, quote] = pair.split('-');
+      const [base, rawQuote] = pair.split('-');
+      let quote = rawQuote;
       if (quote === 'USD') {
         quote = 'USDT';
       }

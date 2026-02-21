@@ -30,6 +30,7 @@ export enum MerchantStatus {
 
 export enum KycStatus {
   PENDING = 'pending',
+  RESUBMISSION_REQUESTED = 'resubmission_requested',
   APPROVED = 'approved',
   REJECTED = 'rejected',
   NOT_SUBMITTED = 'not_submitted',

@@ -178,6 +178,7 @@ export class StacksService {
   async estimateFee(txBytes: string) {
     try {
       const { data, error } = await this.client.POST('/extended/v1/fee_rate/', {
+        params: {},
         body: { transaction: txBytes },
       });
       if (error) throw new Error(JSON.stringify(error));
@@ -190,7 +191,9 @@ export class StacksService {
 
   async getApiStatus() {
     try {
-      const { data, error } = await this.client.GET('/extended');
+      const { data, error } = await this.client.GET('/extended', {
+        params: {},
+      });
       if (error) throw new Error(JSON.stringify(error));
       return data;
     } catch (error) {

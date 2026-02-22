@@ -27,11 +27,11 @@ import {
   BulkRetryRequestDto,
   WebhookTestResultDto,
 } from '../dto/webhook-monitoring.dto';
-import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
+import { JwtGuard } from '../../auth/guards/jwt.guard';
 
 @ApiTags('Webhook Monitoring')
 @ApiBearerAuth('JWT-auth')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtGuard)
 @Controller('webhooks')
 export class WebhookMonitoringController {
   constructor(

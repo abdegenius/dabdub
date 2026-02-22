@@ -87,7 +87,7 @@ export class EVMService implements OnModuleInit {
       throw new Error(`USDC not supported or configured on chain ${chainId}`);
     }
 
-    const balance = (await client.readContract({
+    const balance = (await (client as any).readContract({
       address: usdcAddress,
       abi: ERC20_ABI,
       functionName: 'balanceOf',
@@ -125,7 +125,7 @@ export class EVMService implements OnModuleInit {
       throw new Error(`USDC not supported or configured on chain ${chainId}`);
     }
 
-    const hash = await walletClient.writeContract({
+    const hash = await (walletClient as any).writeContract({
       address: usdcAddress,
       abi: ERC20_ABI,
       functionName: 'transfer',

@@ -108,6 +108,11 @@ export class AdminAuthService {
       };
 
       const accessToken = this.jwtService.sign(accessTokenPayload, {
+        expiresIn: adminJwtExpiresIn as any,
+      });
+
+      const refreshToken = this.jwtService.sign(refreshTokenPayload, {
+        expiresIn: refreshTokenExpiresIn as any,
         expiresIn: this.parseExpirationTime(adminJwtExpiresIn),
       });
 
@@ -194,6 +199,8 @@ export class AdminAuthService {
         exp: Math.floor(Date.now() / 1000) + this.parseExpirationTime(adminJwtExpiresIn),
       };
 
+      const accessToken = this.jwtService.sign(accessTokenPayload, {
+        expiresIn: adminJwtExpiresIn as any,
       const refreshTokenPayload = {
         sub: user.id,
         sessionId,

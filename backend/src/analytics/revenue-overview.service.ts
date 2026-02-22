@@ -139,7 +139,7 @@ export class RevenueOverviewService {
     for (const row of byTierRaw) {
       const tier = row.tier || 'STARTER';
       byTier[tier] = {
-        revenueUsd: parseFloat(row.revenueUsd || 0).toFixed(2),
+        revenueUsd: parseFloat(String(row.revenueUsd ?? '0')).toFixed(2),
         transactionCount: parseInt(row.transactionCount || '0', 10),
       };
     }
@@ -148,21 +148,21 @@ export class RevenueOverviewService {
     }
 
     const totalByChain = byChainRaw.reduce(
-      (s, r) => s + parseFloat(r.revenueUsd || 0),
+      (s, r) => s + parseFloat(String(r.revenueUsd ?? '0')),
       0,
     );
     const byChain = byChainRaw.map((r) => ({
       chain: (r.chain || 'unknown').toLowerCase(),
-      revenueUsd: parseFloat(r.revenueUsd || 0).toFixed(2),
+      revenueUsd: parseFloat(String(r.revenueUsd ?? '0')).toFixed(2),
       percentage:
         totalByChain > 0
-          ? ((parseFloat(r.revenueUsd || 0) / totalByChain) * 100).toFixed(1)
+          ? ((parseFloat(String(r.revenueUsd ?? '0')) / totalByChain) * 100).toFixed(1)
           : '0.0',
     }));
 
     const trend: TrendItemDto[] = trendRaw.map((r) => ({
       period: r.period,
-      revenueUsd: parseFloat(r.revenueUsd || 0).toFixed(2),
+      revenueUsd: parseFloat(String(r.revenueUsd ?? '0')).toFixed(2),
       transactionCount: parseInt(r.transactionCount || '0', 10),
     }));
 

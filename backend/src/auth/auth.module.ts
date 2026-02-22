@@ -28,8 +28,8 @@ import { AdminThrottlerGuard } from '../common/guards/admin-throttler.guard';
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-      UserEntity, 
-      ApiKeyEntity, 
+      UserEntity,
+      ApiKeyEntity,
       SessionEntity,
       AdminSessionEntity,
       AdminLoginAttemptEntity,
@@ -40,8 +40,7 @@ import { AdminThrottlerGuard } from '../common/guards/admin-throttler.guard';
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_SECRET'),
         signOptions: {
-          expiresIn:
-            configService.get<string>('JWT_EXPIRATION') || ('1h' as any),
+          expiresIn: (configService.get<string>('JWT_EXPIRATION') || '1h') as any,
           algorithm: 'HS256',
         },
       }),

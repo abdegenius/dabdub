@@ -2,10 +2,17 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MerchantController } from './controllers/merchant.controller';
 import { MerchantFeeController } from './controllers/merchant-fee.controller';
+import { MerchantNoteController } from './controllers/merchant-note.controller';
+import {
+  MerchantTagController,
+  MerchantTagAssignmentController,
+} from './controllers/merchant-tag.controller';
+import { MerchantFollowUpController } from './controllers/merchant-follow-up.controller';
 import { MerchantService } from './services/merchant.service';
 import { MerchantFeeService } from './services/merchant-fee.service';
+import { MerchantNoteService } from './services/merchant-note.service';
+import { MerchantTagService } from './services/merchant-tag.service';
 import { MerchantLifecycleController } from './controllers/merchant-lifecycle.controller';
-import { MerchantService } from './services/merchant.service';
 import { MerchantLifecycleService } from './services/merchant-lifecycle.service';
 import { MerchantLifecycleProcessor } from './processors/merchant-lifecycle.processor';
 import { Merchant } from '../database/entities/merchant.entity';
@@ -16,6 +23,8 @@ import { MerchantJwtStrategy } from './strategies/merchant-jwt.strategy';
 import { PassportModule } from '@nestjs/passport';
 import { MerchantAuditLog } from './entities/merchant-audit-log.entity';
 import { MerchantNote } from './entities/merchant-note.entity';
+import { MerchantTag } from './entities/merchant-tag.entity';
+import { MerchantTagAssignment } from './entities/merchant-tag-assignment.entity';
 import { ApiKey } from '../api-key/entities/api-key.entity';
 import { MerchantFeeConfig } from './entities/merchant-fee-config.entity';
 import { PlatformFeeDefault } from './entities/platform-fee-default.entity';
@@ -25,10 +34,7 @@ import { SuperAdminGuard } from '../auth/guards/super-admin.guard';
 import { MerchantSuspension } from './entities/merchant-suspension.entity';
 import { MerchantTermination } from './entities/merchant-termination.entity';
 import { MerchantFlag } from './entities/merchant-flag.entity';
-import { ApiKey } from '../api-key/entities/api-key.entity';
-import { BullModule } from '@nestjs/bullmq';
-
-
+import { BullModule } from '@nestjs/bull';
 
 @Module({
   imports: [
@@ -36,24 +42,22 @@ import { BullModule } from '@nestjs/bullmq';
       Merchant,
       MerchantAuditLog,
       MerchantNote,
+      MerchantTag,
+      MerchantTagAssignment,
       ApiKey,
       MerchantFeeConfig,
       PlatformFeeDefault,
       PlatformFeeAuditLog,
       UserEntity,
-    ]),
       MerchantSuspension,
       MerchantTermination,
       MerchantFlag,
-      ApiKey,
     ]),
     BullModule.registerQueue(
       { name: 'settlements' },
       { name: 'notifications' },
     ),
-
-
-    AuthModule, // Assuming we might need auth services like PasswordService if exported, or we replicate logic
+    AuthModule,
     ConfigModule,
     PassportModule,
     JwtModule.registerAsync({
@@ -68,16 +72,31 @@ import { BullModule } from '@nestjs/bullmq';
       }),
     }),
   ],
-  controllers: [MerchantController, MerchantFeeController],
-  providers: [MerchantService, MerchantFeeService, MerchantJwtStrategy, SuperAdminGuard],
-  exports: [MerchantService, MerchantFeeService],
-  controllers: [MerchantController, MerchantLifecycleController],
+  controllers: [
+    MerchantController,
+    MerchantFeeController,
+    MerchantLifecycleController,
+    MerchantNoteController,
+    MerchantTagController,
+    MerchantTagAssignmentController,
+    MerchantFollowUpController,
+  ],
   providers: [
     MerchantService,
+    MerchantFeeService,
     MerchantLifecycleService,
     MerchantLifecycleProcessor,
+    MerchantNoteService,
+    MerchantTagService,
     MerchantJwtStrategy,
+    SuperAdminGuard,
   ],
-  exports: [MerchantService, MerchantLifecycleService],
+  exports: [
+    MerchantService,
+    MerchantFeeService,
+    MerchantLifecycleService,
+    MerchantNoteService,
+    MerchantTagService,
+  ],
 })
-export class MerchantModule { }
+export class MerchantModule {}
